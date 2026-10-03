@@ -1,0 +1,26 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # No `cache:` here on purpose, so every run downloads dependencies fresh.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      # Shows what the e-iceblue repo returns to a GitHub runner, outside of Maven.
+      - name: Probe e-iceblue repo
+        run: |
+          curl -sS -I https://repo.e-iceblue.com/repository/maven-public/e-iceblue/spire.xls/13.4.1/spire.xls-13.4.1.pom || true
+
+      - name: Build
+        run: mvn -B -U -e clean package

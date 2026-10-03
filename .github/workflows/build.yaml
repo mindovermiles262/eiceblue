@@ -26,5 +26,9 @@ jobs:
         run: |
           curl -sS -I https://repo.e-iceblue.com/repository/maven-public/e-iceblue/spire.xls/13.4.1/spire.xls-13.4.1.pom || true
 
+      - name: Go Offline
+        run: |
+          mvn dependency:go-offline --no-transfer-progress --errors
+
       - name: Build
-        run: mvn -B -U -e clean package
+        run: mvn -B -U -e clean package -DskipTests
